@@ -15,10 +15,16 @@ var rootCmd = &cobra.Command{
 	Short: "A tool to generate myrepos configuration from various SCM systems",
 	Long:  `Generate a myrepos configuration file from your SCM system of choice.`,
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
-		viper.BindPFlag("debug", cmd.Flags().Lookup("debug"))
-		viper.BindPFlag("verbose", cmd.Flags().Lookup("verbose"))
-		viper.BindPFlag("template", cmd.Flags().Lookup("template"))
-		viper.BindPFlag("prefix", cmd.Flags().Lookup("prefix"))
+		for _, val := range []string{
+			"debug",
+			"prefix",
+			"template",
+			"verbose",
+		} {
+			if err := viper.BindPFlag(val, cmd.Flags().Lookup(val)); err != nil {
+				log.Fatalf("unable to bind %s flag: '%v'", val, err)
+			}
+		}
 
 		// Output to stdout instead of the default stderr
 		log.SetOutput(os.Stdout)

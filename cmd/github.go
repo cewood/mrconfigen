@@ -51,14 +51,20 @@ func init() {
 	githubCmd.Flags().String("token", "", "the token to use for api requests")
 
 	// Bind flags to viper config, for free environment lookups
-	viper.BindPFlag("affiliation", githubCmd.Flags().Lookup("affiliation"))
-	viper.BindPFlag("count", githubCmd.Flags().Lookup("count"))
-	viper.BindPFlag("direction", githubCmd.Flags().Lookup("direction"))
-	viper.BindPFlag("name", githubCmd.Flags().Lookup("name"))
-	viper.BindPFlag("prefix", githubCmd.Flags().Lookup("prefix"))
-	viper.BindPFlag("sort", githubCmd.Flags().Lookup("sort"))
-	viper.BindPFlag("token", githubCmd.Flags().Lookup("token"))
-	viper.BindPFlag("type", githubCmd.Flags().Lookup("type"))
-	viper.BindPFlag("user", githubCmd.Flags().Lookup("user"))
-	viper.BindPFlag("visibility", githubCmd.Flags().Lookup("visibility"))
+	for _, val := range []string{
+		"affiliation",
+		"count",
+		"direction",
+		"name",
+		"prefix",
+		"sort",
+		"token",
+		"type",
+		"user",
+		"visibility",
+	} {
+		if err := viper.BindPFlag(val, githubCmd.Flags().Lookup(val)); err != nil {
+			log.Fatalf("unable to bind %s flag: '%v'", val, err)
+		}
+	}
 }

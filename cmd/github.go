@@ -15,14 +15,6 @@ var githubCmd = &cobra.Command{
 	Short: "GitHub provider for Mrconfigen",
 	Long:  `Query the GitHub repositories of an Org/User and generate mr config for them`,
 	Run: func(cmd *cobra.Command, args []string) {
-		// Explicitly check our required args, since the inbuilt required
-		//  annotation doesn't take into account environment variables
-		if viper.GetString("token") == "" {
-			log.Fatal("token was not set, please supply a valid token")
-		} else if viper.GetString("name") == "" {
-			log.Fatal("name was not set, please supply a valid name")
-		}
-
 		github.Run()
 	},
 	PreRun: func(cmd *cobra.Command, args []string) {
